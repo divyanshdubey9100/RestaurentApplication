@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="/css/cart-head.css">
+    <link rel="stylesheet" href="/css/cart-section.css">
+    <link rel="stylesheet" href="/css/cart-nav.css">
+    <link rel="stylesheet" href="/css/cart-footer.css">
+    <script src="/jquery/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+    <header id="header">
+        <div id="head-left">
+            <p id="price">₹</p>
+            <p id="value" th:text="${sum}"></p>
+        </div>
+        <div id="head-left">
+            <ul id="ul-btn">
+                <a href="#" id="own-recipe"><li >Own Recipe</li></a>
+                
+                <a href="/history" id="history"><li>History</li></a>
+            </ul>
+        </div>
+    </header>
+    <nav id="nav">
+        <div id="nav-left"></div>
+        <div id="nav-center">
+            <ul id="nav-menu-list">
+                <li><a href="/i" id="li-a">Home</a></li>
+                <li><a href="/nonVeg" id="li-a">Non-Veg</a></li>
+                <li><a href="/veg" id="li-a">Veg</a></li>
+                <li><a href="/italian" id="li-a">Italian</a></li>
+                <li><a href="/continental" id="li-a">Continental</a></li>
+                <li><a href="/bakery" id="li-a">Bakery</a></li>
+                <li><a href="/juices" id="li-a">Juices</a></li>
+                <li><a href="/ownHistory" id="li-a">Recent Own Recipe</a></li>
+            </ul>
+        </div>
+        <div id="nav-right"></div>
+     </nav>
+  	   
+     
+    <div id="section-body">				
+        <div id="section-left"></div>
+        <div id="section-right">
+            <form action="/addOwnRecipe" id="recipe-frm">
+                <h1>Enter Your Own Recipe</h1>
+                <input type="text" name="name" placeholder="Enter recipe name" id="recipe-name">
+                <textarea name="recDesc" id="textarea" placeholder="Enter Your Recipe"></textarea>
+                <input type="hidden" name="price" value="150">
+                <br>
+                <span id="own-qty-span">Qty:
+                <input id="own-qty" min="1" name="qty" value="1" type="number">
+                </span>
+                <br><br>
+                <select name="type" id="own-recipe" required>
+				    <option value="Non-Veg">Non-Veg</option>
+				    <option value="Veg">Veg</option>
+				    <option value="Italian">Italian</option>
+				    <option value="Continental">Continental</option>
+				    <option value="Bakery">Bakery</option>
+				    <option value="Juices">Juices</option>
+				 </select>
+				 <br><br>
+                <button id="add-order">Add Order</button>
+                <button id="cancel-order">Cancel Order</button>
+            </form>
+               <div>
+     <table style="color:white;" id="cart-items">
+<!--       <tr th:if="${! ilist.empty}">getit -->
+	<tr>
+     <th class="cart-title">Item</th>
+     <th class="cart-title">Item-Name</th>
+     <th class="cart-title">Price</th>
+     <th class="cart-title">.qty</th>
+     <th class="cart-title">Or.Date</th>
+     <th class="cart-title">Total-Price</th>
+     <th class="cart-title" colspan="3">Action</th>
+     </tr>
+     	<tr th:each="item: ${ilist}">
+     		<td><img th:src="@{${'/img/allimg/' + item.name +'.jpg'}}" width="120"></td>
+     		<td th:text="${item.name}" class="cart-data"> </td>
+     		<td th:text="${item.price}" class="cart-data"> </td>
+     		<td th:text="${item.qty}" class="cart-data"> </td>
+     		<td th:text="${item.date}" class="cart-data"> </td>
+     		<td th:text="${item.totalPrice}" class="cart-data"> </td>
+     		
+     		
+     		<td><form action="/edit" th:object="${item}">
+     			<input type="hidden" name="id" th:value="${item.id}">
+     			<input type="hidden" name="status" th:value="${item.status}">
+     			<input type="hidden" name="time" th:value="${item.time}">
+     			<input type="hidden" name="name" th:value="${item.name}">
+     			<input type="hidden" name="type" th:value="${item.type}"> 
+     			<input type="hidden" name="price" th:value="${item.price}">
+     			<input type="hidden" name="qty" th:value="${item.qty}">
+     			<input type="hidden" name="user" th:value="${item.user}">
+     			<input type="hidden" name="date" th:value="${item.date}">
+     			<input type="hidden" name="totalPrice" th:value="${item.totalPrice}">
+     			
+     		<button id="place-order">Edit</button></form>
+     		</td>
+     		
+     		<td><form action="/cancel" th:object="${item}">
+     		<input type="hidden" name="name" th:value="${item.name}">
+     		<input type="hidden" name="type" th:value="${item.type}"> 
+     			<input type="hidden" name="price" th:value="${item.price}">
+     			<input type="hidden" name="qty" th:value="${item.qty}">
+     			<input type="hidden" name="status" th:value="${item.status}">
+     			<input type="hidden" name="time" th:value="${item.time}">
+     			<input type="hidden" name="user" th:value="${item.user}">
+     			<input type="hidden" name="date" th:value="${item.date}">
+     			<input type="hidden" name="totalPrice" th:value="${item.totalPrice}">
+     		<button id="place-order">Cancel</button></form>
+     		
+     		</td>
+     			<td><form action="/ordered" th:object="${item}">
+     		<input type="hidden" name="name" th:value="${item.name}">
+     		<input type="hidden" name="type" th:value="${item.type}"> 
+     		<input type="hidden" name="status" th:value="${item.status}">
+     			<input type="hidden" name="time" th:value="${item.time}">
+     			<input type="hidden" name="price" th:value="${item.price}">
+     			<input type="hidden" name="qty" th:value="${item.qty}">
+     			<input type="hidden" name="user" th:value="${item.user}">
+     			<input type="hidden" name="date" th:value="${item.date}">
+     			<input type="hidden" name="totalPrice" th:value="${item.totalPrice}">
+     		<button id="place-order">Confirm</button></form>
+     		
+     		</td>
+     	</tr>
+
+     </table>
+
+      <div class="total-price">
+     <span>Total-Price:</span>
+     <span th:text="${toCost}" ></span> <ul id="footer-btn">
+                <a href="/cancelAllItems" id="cancel-all"><li>Cancel All</li></a>
+            </ul>
+     </div>
+     
+     <table style="color: white;" id="cart-items">
+     <tr><th  style="color:white;text-align:center;"
+      class="cart-title">Confirmed-order</th></tr>
+					<!--       <tr th:if="${! ilist.empty}">getit -->
+					<tr>
+						<th class="cart-title">Item</th>
+						<th class="cart-title">Item-Name</th>
+						<th class="cart-title">Price</th>
+						<th class="cart-title">.qty</th>
+						<th class="cart-title">Or.Date</th>
+						<th class="cart-title">Or.status</th>
+						<th class="cart-title">Total-Price</th>
+						<th class="cart-title" colspan="1">Action</th>
+					</tr>
+					<tr th:each="item: ${olist}">
+						<td><img th:src="@{${'/img/allimg/' + item.name +'.jpg'}}"
+							width="120"></td>
+						<td th:text="${item.name}" class="cart-data"></td>
+						<td th:text="${item.price}" class="cart-data"></td>
+						<td th:text="${item.qty}" class="cart-data"></td>
+						<td th:text="${item.date}" class="cart-data"></td>
+						<td th:text="${item.status}" class="cart-data"></td>
+						<td th:text="${item.totalPrice}" class="cart-data"></td>
+
+
+					
+
+						<td><form action="/cancelConfirmed" th:object="${item}">
+								<input type="hidden" name="name" th:value="${item.name}">
+								<input type="hidden" name="type" th:value="${item.type}">
+								<input type="hidden" name="price" th:value="${item.price}">
+								<input type="hidden" name="qty" th:value="${item.qty}">
+								<input type="hidden" name="status" th:value="${item.status}">
+								<input type="hidden" name="time" th:value="${item.time}">
+								<input type="hidden" name="user" th:value="${item.user}">
+								<input type="hidden" name="date" th:value="${item.date}">
+								<input type="hidden" name="totalPrice"
+									th:value="${item.totalPrice}">
+								<button id="place-order">Cancel</button>
+							</form></td>
+						
+					</tr>
+				</table>
+     <div class="total-price">
+     <span>Total-Price:</span>
+     <span th:text="${confirmtoCost}" ></span>
+     </div>
+     </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <div id="footer-left">
+            
+        </div>
+        <div id="footer-left">
+            <ul id="footer-btn">
+                
+                <a href="cancelAllConfirmedOerder" id="cancel-all"><li>Cancel All</li></a>
+            </ul>
+        </div>
+    </footer>
+     <footer id="footer">
+        <div id="footer-left">
+            
+        </div>
+       
+    </footer>
+    
+   <!-- -- --> 
+    
+    
+    
+    <script src="jquery/cart.js"></script>
+</body>
+</html>

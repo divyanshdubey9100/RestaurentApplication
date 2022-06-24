@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/cart-section.css">
+</head>
+<body>
+<a href="/adminBhau" style="color: red">Main Page</a>
+<table style="color:white;" id="cart-items">
+    <tr>
+    <td class="cart-title">Image</td>
+        <td class="cart-title"> Name</td>
+        <td class="cart-title"> Price </td>
+            <td class="cart-title">Type</td>
+            <td class="cart-title">Count</td>
+    </tr>
+ <tr th:each="i : ${itemList}">
+<td ><img th:src="@{${'/img/allimg/' + i.name +'.jpg'}}" width="120"></td>
+			            <td th:text="${i.name}" class="cart-data"> </td>
+			            <td th:text="${i.price}" class="cart-data"> </td>
+                      	<td th:text="${i.type}" class="cart-data"> </td> 
+                        <td th:text="${i.count}" class="cart-data">  </td> 
+        </tr>
+        </table>
+</body>
+</html>
